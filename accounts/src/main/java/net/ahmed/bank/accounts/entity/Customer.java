@@ -1,0 +1,25 @@
+package net.ahmed.bank.accounts.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+@Entity
+@AllArgsConstructor @NoArgsConstructor @Getter @Setter @ToString
+@Table(name = "customer")
+public class Customer extends  BaseEntity{
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long customer_id;
+
+    @Column(name = "name")
+    private String  name;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "mobile_number")
+    private String  mobileNumber;
+
+}

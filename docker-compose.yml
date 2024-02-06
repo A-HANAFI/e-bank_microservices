@@ -1,0 +1,36 @@
+networks:
+  eazybank:
+    driver: "bridge"
+services:
+  accounts:
+    image: ahmedhanafi88/accounts:v01
+    container_name: accounts
+    ports:
+      - "8080:8080"
+    deploy:
+      resources:
+        limits:
+          memory: 700mb
+    networks:
+      ["eazybank"]
+  loans:
+    image: ahmedhanafi88/loans:v01
+    container_name: loans
+    ports:
+      - "8090:8090"
+    deploy:
+      resources:
+        limits:
+          memory: 700mb
+    networks:
+
+    image: ahmedhanafi88/cards:v01
+    container_name: cards
+    ports:
+      - "9000:9000"
+    deploy:
+      resources:
+        limits:
+          memory: 700mb
+    networks:
+      ["eazybank"]
