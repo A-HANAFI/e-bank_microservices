@@ -8,12 +8,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
 import net.ahmed.bank.accounts.constants.AccountsConstants;
+import net.ahmed.bank.accounts.dto.AccountsContactInfoDto;
 import net.ahmed.bank.accounts.dto.CustomerDto;
 import net.ahmed.bank.accounts.dto.ErrorResponseDto;
 import net.ahmed.bank.accounts.dto.ResponseDto;
 import net.ahmed.bank.accounts.service.IAccountsService;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -24,11 +26,88 @@ description = "CRUD REST APIs for Accounts in EAZYBANK, create, update, show acc
 )
 @RestController
 @RequestMapping(path = "/api")
-@AllArgsConstructor
+//@AllArgsConstructor
 @Validated
 public class AccountsController {
 
-    private IAccountsService iAccountsService;
+    private final IAccountsService iAccountsService;
+
+    @Value("${build.version}")
+    private String buildVersion;
+
+    private Environment environment;
+
+    AccountsContactInfoDto accountsContactInfoDto;
+
+    public AccountsController(IAccountsService iAccountsService, Environment environment, AccountsContactInfoDto accountsContactInfoDto) {
+        this.iAccountsService = iAccountsService;
+        this.environment = environment;
+        this.accountsContactInfoDto = accountsContactInfoDto;
+    }
+
+    @Operation(summary = "retrieve the build version",
+            description = "CRUD REST API fetch the build version")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "HTTP Status CREATED"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status Internal Server Error",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
+            )
+    }
+    )
+    @GetMapping("/build-info")
+    public ResponseEntity<String> build(){
+        return ResponseEntity.status(HttpStatus.OK).body(buildVersion);
+    }
+
+
+    @Operation(summary = "retrieve the JAVA version",
+            description = "CRUD REST API fetch the JAVA version")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "HTTP Status CREATED"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status Internal Server Error",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
+            )
+    }
+    )
+    @GetMapping("/java-version")
+    public ResponseEntity<String> javaVersion(){
+        return ResponseEntity.status(HttpStatus.OK).body(environment.getProperty("JAVA_HOME"));
+    }
+
+    @Operation(summary = "retrieve the developer contact info",
+            description = "CRUD REST API fetch the developer contact info")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP Status Found"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status Internal Server Error",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
+            )
+    }
+    )
+    @GetMapping("/contact-info")
+    public ResponseEntity<AccountsContactInfoDto> getContactInfo(){
+        return ResponseEntity.status(HttpStatus.OK).body(accountsContactInfoDto);
+    }
 
     @Operation(summary = "create an account",
             description = "CRUD REST API to create, update, fetch and delete an account and a customer ")

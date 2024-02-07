@@ -81,7 +81,7 @@
                 <version>3.4.0</version>
                 <configuration>
                     <to>
-                        <image>ahmedhanafi88/${project.artifactId}:v01</image>
+                        <image>ahmedhanafi88/${project.artifactId}:v02</image>
                     </to>
                 </configuration>
             </plugin>
