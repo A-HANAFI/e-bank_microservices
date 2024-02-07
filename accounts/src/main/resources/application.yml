@@ -15,4 +15,14 @@ spring:
     console:
       enabled: true
 
+build:
+ version: "v01"
 
+contacts:
+  message: "welcome"
+  contactDetails:
+    name: "ahmed"
+    email: "a7med.connect@gmail.com"
+  onCallSupport:
+    - 222222222
+    - 333333333
