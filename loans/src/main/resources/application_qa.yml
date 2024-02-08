@@ -1,0 +1,16 @@
+build:
+  version: "v02"
+
+spring:
+  config:
+    activate:
+      on-profile: "qa"
+
+contacts:
+  message: "welcome QA team"
+  contactDetails:
+    name: "QA lead"
+    email: "a7med.connect@gmail.com"
+  phones:
+    - 4444444
+    - 5555555

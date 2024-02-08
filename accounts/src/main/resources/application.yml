@@ -14,25 +14,17 @@ spring:
   h2:
     console:
       enabled: true
+  config:
+    import:
+      - "application_qa.yml"
+      - "application_prod.yml"
+  profiles:
+    active: "qa"
 
 build:
- version: "v01"
+ version: "v03"
 
-<<<<<<< HEAD
 
-build:
-  version: "3.0"
-
-accounts:
-  message: "Welcome to EazyBank accounts related local APIs "
-  contactDetails:
-    name: "John Doe - Developer"
-    email: "john@eazybank.com"
-  onCallSupport:
-    - (555) 555-1234
-    - (555) 523-1345
-
-=======
 contacts:
   message: "welcome"
   contactDetails:
@@ -41,4 +33,3 @@ contacts:
   onCallSupport:
     - 222222222
     - 333333333
->>>>>>> master_v1

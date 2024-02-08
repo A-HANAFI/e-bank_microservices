@@ -14,3 +14,21 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+  config:
+    import:
+      - "application_prod.yml"
+      - "application_qa.yml"
+  profiles:
+    active: "qa"
+
+build:
+  version: "v03"
+
+contacts:
+  message: "welcome"
+  contactDetails:
+    name: "ahmed"
+    email: "a7med.connect@gmail.com"
+  phones:
+    - 2222222
+    - 3333333
