@@ -1,11 +1,6 @@
 build:
   version: "v02"
 
-spring:
-  config:
-    activate:
-      on-profile: "qa"
-
 contacts:
   message: "welcome QA team"
   contactDetails:

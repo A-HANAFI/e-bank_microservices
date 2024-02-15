@@ -1,0 +1,13 @@
+
+build:
+ version: "v03"
+
+
+contacts:
+  message: "welcome"
+  contactDetails:
+    name: "ahmed"
+    email: "a7med.connect@gmail.com"
+  onCallSupport:
+    - 222222222
+    - 333333333

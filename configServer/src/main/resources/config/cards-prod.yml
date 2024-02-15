@@ -1,11 +1,6 @@
 build:
   version: "v01"
 
-spring:
-  config:
-    activate:
-      on-profile: "prod"
-
 contacts:
   message: "welcome prod team"
   contactDetails:

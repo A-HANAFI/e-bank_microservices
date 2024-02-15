@@ -1,35 +1,33 @@
 server:
-  port: 8080
+  port: 8081
 spring:
+  application:
+    name: "accounts"
   datasource:
     url: jdbc:h2:mem:testdb
-    driver-class-name: org.h2.Driver
+    driverClassName: org.h2.Driver
     username: sa
-    password:
+    password: ''
+  h2:
+    console:
+      enabled: true
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: update
     show-sql: true
-  h2:
-    console:
-      enabled: true
-  config:
-    import:
-      - "application_qa.yml"
-      - "application_prod.yml"
   profiles:
-    active: "qa"
+    active: "prod"
+  config:
+    import: optional:configserver:http://localhost:8071/
+  rabbitmq:
+    host: "localhost"
+    port: 5672
+    username: "guest"
+    password: "guest"
 
-build:
- version: "v03"
-
-
-contacts:
-  message: "welcome"
-  contactDetails:
-    name: "ahmed"
-    email: "a7med.connect@gmail.com"
-  onCallSupport:
-    - 222222222
-    - 333333333
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

@@ -1,0 +1,67 @@
+
+services:
+  rabbitmq:
+    image: rabbitmq:3.12-management
+    container_name: rabbitmq
+    healthcheck:
+      test: rabbitmq-diagnostics check_port_connectivity
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+    ports:
+      - 5672:5672
+      - 15672:15672
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
+
+  configserver:
+    image: ahmedhanafi88/configserver:s06
+    container_name: configserver_ms
+    ports:
+      - "8071:8071"
+    depends_on:
+     rabbitmq:
+      condition: service_healthy
+    healthcheck:
+      test: "curl --fail --silent localhost:8071/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+    extends:
+      file: common-config.yml
+      service: microservice-base-config
+
+  accounts:
+    image: ahmedhanafi88/accounts:s06
+    container_name: accounts_ms
+    ports:
+      - "8081:8081"
+    extends:
+      file: common-config.yml
+      service: microservice-configserver-config
+
+  loans:
+    image: ahmedhanafi88/loans:s06
+    container_name: "loans_ms"
+    ports:
+      - "8090:8090"
+    extends:
+      file: common-config.yml
+      service: microservice-configserver-config
+
+
+  cards:
+    image: ahmedhanafi88/cards:s06
+    container_name: cards_ms
+    ports:
+      - "9000:9000"
+    extends:
+      file: common-config.yml
+      service: microservice-configserver-config
+
+networks:
+  eazybank:
+    driver: "bridge"

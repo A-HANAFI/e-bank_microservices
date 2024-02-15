@@ -1,10 +1,11 @@
 server:
   port: 8090
-
 spring:
+  application:
+    name: "loans"
   datasource:
     url: jdbc:h2:mem:testdb
-    driver-class-name: org.h2.Driver
+    driverClassName: org.h2.Driver
     username: sa
     password: ''
   h2:
@@ -16,20 +17,11 @@ spring:
       ddl-auto: update
     show-sql: true
   config:
-    import:
-      - "application_prod.yml"
-      - "application_qa.yml"
+    import: optional:configserver:http://localhost:8071/
   profiles:
-    active: "qa"
-
-build:
-  version: "v03"
-
-contacts:
-  message: "welcome"
-  contactDetails:
-    name: "ahmed"
-    email: "a7med.connect@gmail.com"
-  phones:
-    - 2222222
-    - 3333333
+    active: "prod"
+  rabbitmq:
+    host: "localhost"
+    port: 5672
+    username: "guest"
+    password: "guest"
