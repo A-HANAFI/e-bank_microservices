@@ -19,16 +19,16 @@ import java.util.Random;
 public class LoanServiceImpl implements LoanService {
     LoanRepository loanRepository;
     /**
-     * @param loanDto
+     * @param mobileNumber
      * @return Loan
      */
     @Override
-    public Loan createLoan(String phoneNumber) {
-        Optional<Loan> loan = loanRepository.findLoanByMobileNumber(phoneNumber);
+    public Loan createLoan(String mobileNumber) {
+        Optional<Loan> loan = loanRepository.findLoanByMobileNumber(mobileNumber);
         if (loan.isPresent()){
             throw new LoanAlreadyExistsException("loan already exists with given phone number");
         }
-        return loanRepository.save(createNewLoan(phoneNumber));
+        return loanRepository.save(createNewLoan(mobileNumber));
     }
     private Loan createNewLoan(String mobileNumber){
         Loan newLoan = new Loan();

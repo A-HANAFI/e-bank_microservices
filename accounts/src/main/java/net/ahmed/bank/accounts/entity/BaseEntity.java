@@ -1,7 +1,6 @@
 package net.ahmed.bank.accounts.entity;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
@@ -32,9 +31,9 @@ public class BaseEntity {
 
     @Column(insertable = false)
     @LastModifiedDate
-    private LocalDateTime modified_at;
+    private LocalDateTime updated_at;
 
     @Column(insertable = false)
     @LastModifiedBy
-    private String modified_by;
+    private String updated_by;
 }

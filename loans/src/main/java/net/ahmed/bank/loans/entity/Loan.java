@@ -11,7 +11,7 @@ public class Loan extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    Integer loanId;
 
     @Column(name = "mobile_number")
     String mobileNumber;
@@ -19,7 +19,8 @@ public class Loan extends BaseEntity {
     @Column(name = "loan_number")
     String loanNumber;
 
-    @Column(name = "loan_type")
+    @Column(name = "loan_type",columnDefinition = "ENUM('CAR', 'HOUSE', 'EDUCATION')")
+    @Enumerated(EnumType.STRING)
     LoanType loanType;
 
     @Column(name = "total_loan")
