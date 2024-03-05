@@ -14,6 +14,8 @@ import net.ahmed.bank.loans.DTO.ResponseDTO;
 import net.ahmed.bank.loans.constant.LoanConstants;
 import net.ahmed.bank.loans.entity.Loan;
 import net.ahmed.bank.loans.service.LoanService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -28,7 +30,7 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @RequestMapping("/api")
 public class LoanController {
-
+    private static final Logger logger = LoggerFactory.getLogger(LoanController.class);
     LoanService loanService;
 
     @Value("${build.version}")
@@ -190,7 +192,9 @@ public class LoanController {
     }
     )
     @GetMapping("/fetch")
-    public ResponseEntity<LoanDto> findLoan(@RequestParam String mobileNumber){
+    public ResponseEntity<LoanDto> findLoan(@RequestHeader("ahmedbank-correlation-id") String  correlationId,
+                                            @RequestParam String mobileNumber){
+        logger.debug("ahmed bank correlation id found: {}", correlationId);
         LoanDto loanDto =  loanService.fetchLoan(mobileNumber);
         return ResponseEntity.status(HttpStatus.OK).body(loanDto);
     }

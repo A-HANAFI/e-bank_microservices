@@ -6,7 +6,6 @@ spring:
     name: "configserver"
   profiles:
     active: git
-  #    active: native
   cloud:
     config:
       server:
@@ -15,18 +14,11 @@ spring:
           default-label: main
           clone-on-start: true
           force-pull: true
-#  rabbitmq:
-#    host: "localhost"
-#    port: 5672
-#    username: "guest"
-#    password: "guest"
+
 
 encrypt:
   key: "hellohello654321"
 
-#        native:
-#          search-locations: "file:///E://tuto & certifs//SPRING//UDEMY//MicroServices//config"
-#          search-locations: "classpath:/config"
 management:
   endpoints:
     web:
@@ -41,4 +33,5 @@ management:
     health:
       probes:
         enabled: true
-
+    shutdown:
+      enabled: true

@@ -10,13 +10,12 @@ import jakarta.validation.constraints.Pattern;
 import net.ahmed.bank.accounts.dto.CustomerDetailsDto;
 import net.ahmed.bank.accounts.dto.ErrorResponseDto;
 import net.ahmed.bank.accounts.service.ICustomerDetailsService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "CRUD REST APIs for Accounts in Ahmed bank",
         description = "CRUD REST APIs for Accounts in Ahmed bank, create, update, show accounts details and delete"
@@ -27,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "/api")
 public class AccountsDetailsController {
 
+    private static final Logger logger = LoggerFactory.getLogger(AccountsDetailsController.class);
     ICustomerDetailsService iCustomerDetailsService;
 
     public AccountsDetailsController(ICustomerDetailsService iCustomerDetailsService) {
@@ -50,8 +50,10 @@ public class AccountsDetailsController {
     }
     )
     @GetMapping("/fetchCustomerDetails")
-    public ResponseEntity<CustomerDetailsDto> fetchAccountDetails(@Pattern(regexp="(^$|[0-9]{10})",message = "mobile number must be 10 digits")
+    public ResponseEntity<CustomerDetailsDto> fetchAccountDetails(@RequestHeader("ahmedbank-correlation-id") String  correlationId,
+            @Pattern(regexp="(^$|[0-9]{10})",message = "mobile number must be 10 digits")
                                                            @RequestParam String mobileNumber){
-        return ResponseEntity.status(HttpStatus.OK).body(iCustomerDetailsService.fetchCustomerDetails(mobileNumber));
+        logger.debug("ahmed bank correlation id found: {}", correlationId);
+        return ResponseEntity.status(HttpStatus.OK).body(iCustomerDetailsService.fetchCustomerDetails(mobileNumber,correlationId));
     }
 }

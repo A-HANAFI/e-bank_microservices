@@ -14,6 +14,8 @@ import net.ahmed.bank.cards.DTO.ErrorResponseDto;
 import net.ahmed.bank.cards.DTO.ResponseDto;
 import net.ahmed.bank.cards.constants.CardsConstants;
 import net.ahmed.bank.cards.service.ICardsService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -36,6 +38,7 @@ public class CardsController {
     private Environment environment;
     private ICardsService iCardsService;
     private CardsContactInfoDTO cardsContactInfoDTO;
+    private static final Logger logger = LoggerFactory.getLogger(CardsController.class);
 
     public CardsController(Environment environment, ICardsService iCardsService, CardsContactInfoDTO cardsContactInfoDTO) {
         this.environment = environment;
@@ -152,8 +155,10 @@ public class CardsController {
             )
     })
     @GetMapping("/fetch")
-    public ResponseEntity<CardsDto> getCard(@RequestParam @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
+    public ResponseEntity<CardsDto> getCard(@RequestHeader("ahmedbank-correlation-id") String  correlationId,
+                                            @RequestParam @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
                                                 String mobileNumber){
+        logger.debug("ahmed bank correlation id found: {}", correlationId);
         CardsDto cardsDto = iCardsService.fetchCard(mobileNumber);
         return ResponseEntity.status(HttpStatus.OK).body(cardsDto);
     }
