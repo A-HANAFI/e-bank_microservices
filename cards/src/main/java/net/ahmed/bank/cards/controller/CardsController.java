@@ -1,5 +1,6 @@
 package net.ahmed.bank.cards.controller;
 
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -84,8 +85,10 @@ public class CardsController {
             )
     }
     )
+
+
     @GetMapping("/java-version")
-    public ResponseEntity<String> javaVersion(){
+    public ResponseEntity<String> getJavaVersion(){
         return ResponseEntity.status(HttpStatus.OK).body(environment.getProperty("JAVA_HOME"));
     }
 

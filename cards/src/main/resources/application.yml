@@ -1,5 +1,5 @@
 server:
-  port: 9000
+  port: 9001
 spring:
   application:
     name: "cards"
@@ -46,6 +46,8 @@ eureka:
     registerWithEureka: true
     serviceUrl:
       defaultZone: http://localhost:8070/eureka/
+
+
 
 info:
   app:

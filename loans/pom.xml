@@ -135,7 +135,7 @@
                 <version>3.4.0</version>
                 <configuration>
                     <to>
-                        <image>ahmedhanafi88/${project.artifactId}:s09</image>
+                        <image>ahmedhanafi88/${project.artifactId}:s10</image>
                     </to>
                 </configuration>
             </plugin>

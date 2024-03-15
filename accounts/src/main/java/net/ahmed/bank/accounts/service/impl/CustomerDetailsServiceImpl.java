@@ -15,6 +15,7 @@ import net.ahmed.bank.accounts.repository.CustomerRepository;
 import net.ahmed.bank.accounts.service.ICustomerDetailsService;
 import net.ahmed.bank.accounts.service.client.CardsFeignClient;
 import net.ahmed.bank.accounts.service.client.LoansFeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -41,13 +42,17 @@ public class CustomerDetailsServiceImpl implements ICustomerDetailsService {
 
         CustomerDetailsDto customerDetailsDto = CustomerMapper.mapToCustomerDetailsDto(customer, new CustomerDetailsDto());
 
-        LoanDto loanDto = loansFeignClient.findLoan(correlationID, mobileNumber).getBody();
-        CardsDto cardsDto = cardsFeignClient.getCard(correlationID, mobileNumber).getBody();
+        customerDetailsDto.setAccountsDto(AccountsMapper.mapToAccountsDto(accounts, new AccountsDto()));
 
-        customerDetailsDto.setAccountsDto(AccountsMapper.mapToAccountsDto(accounts,new AccountsDto()));
-        customerDetailsDto.setCardsDto(cardsDto);
-        customerDetailsDto.setLoansDto(loanDto);
+        ResponseEntity<LoanDto> loansDtoResponseEntity = loansFeignClient.findLoan(correlationID, mobileNumber);
+        if(null != loansDtoResponseEntity) {
+            customerDetailsDto.setLoansDto(loansDtoResponseEntity.getBody());
+        }
 
+        ResponseEntity<CardsDto> cardsDtoResponseEntity = cardsFeignClient.getCard(correlationID, mobileNumber);
+        if(null != cardsDtoResponseEntity) {
+            customerDetailsDto.setCardsDto(cardsDtoResponseEntity.getBody());
+        }
         return customerDetailsDto;
     }
 }

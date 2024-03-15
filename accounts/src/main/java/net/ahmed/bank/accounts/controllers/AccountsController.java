@@ -1,5 +1,7 @@
 package net.ahmed.bank.accounts.controllers;
 
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import io.github.resilience4j.retry.annotation.Retry;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,12 +16,16 @@ import net.ahmed.bank.accounts.dto.CustomerDto;
 import net.ahmed.bank.accounts.dto.ErrorResponseDto;
 import net.ahmed.bank.accounts.dto.ResponseDto;
 import net.ahmed.bank.accounts.service.IAccountsService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.concurrent.TimeoutException;
 
 @Tag(name = "CRUD REST APIs for Accounts in EAZYBANK",
 description = "CRUD REST APIs for Accounts in EAZYBANK, create, update, show accounts details and delete"
@@ -30,6 +36,7 @@ description = "CRUD REST APIs for Accounts in EAZYBANK, create, update, show acc
 @Validated
 public class AccountsController {
 
+    private static final Logger logger =   LoggerFactory.getLogger(AccountsController.class);
     private final IAccountsService iAccountsService;
 
     @Value("${build.version}")
@@ -61,11 +68,19 @@ public class AccountsController {
             )
     }
     )
-    @GetMapping("/build-info")
-    public ResponseEntity<String> build(){
-        return ResponseEntity.status(HttpStatus.OK).body(buildVersion);
+
+    @Retry(name = "getBuildInfo", fallbackMethod = "getBuildInfoFallBack") //retry pattern implementation
+    @GetMapping("/build-info") //path for get method
+    public ResponseEntity<String> getBuildInfo() throws TimeoutException {
+        logger.debug("accounts build info");
+        throw new TimeoutException();
+//        return ResponseEntity.status(HttpStatus.OK).body(buildVersion);
     }
 
+    public ResponseEntity<String> getBuildInfoFallBack(Throwable throwable){ // the method to invoke after number of retries reached
+        logger.debug("accounts build info fallBack");
+        return ResponseEntity.status(HttpStatus.OK).body("0.9");
+    }
 
     @Operation(summary = "retrieve the JAVA version",
             description = "CRUD REST API fetch the JAVA version")
@@ -83,9 +98,15 @@ public class AccountsController {
             )
     }
     )
+    @RateLimiter(name= "getJavaVersion", fallbackMethod = "getJavaVersionFallback")//implementing RateLimiter pattern inside microservice
     @GetMapping("/java-version")
     public ResponseEntity<String> javaVersion(){
         return ResponseEntity.status(HttpStatus.OK).body(environment.getProperty("JAVA_HOME"));
+    }
+    public ResponseEntity<String> getJavaVersionFallback(Throwable throwable) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body("Java 17");
     }
 
     @Operation(summary = "retrieve the developer contact info",
@@ -106,7 +127,8 @@ public class AccountsController {
     )
     @GetMapping("/contact-info")
     public ResponseEntity<AccountsContactInfoDto> getContactInfo(){
-        return ResponseEntity.status(HttpStatus.OK).body(accountsContactInfoDto);
+        return ResponseEntity
+                .status(HttpStatus.OK).body(accountsContactInfoDto);
     }
 
     @Operation(summary = "create an account",

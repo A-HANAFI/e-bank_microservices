@@ -69,7 +69,7 @@
                 <version>3.4.0</version>
                 <configuration>
                     <to>
-                        <image>ahmedhanafi88/configserver:s09</image>
+                        <image>ahmedhanafi88/configserver:s10</image>
                     </to>
                 </configuration>
             </plugin>
