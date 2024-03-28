@@ -4,14 +4,18 @@ spring:
   application:
     name: "accounts"
   datasource:
-    url: jdbc:mysql://localhost:3307/accountsdb
-    username: root
-    password: 'root'
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: ''
+  h2:
+    console:
+      enabled: true
   jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
     show-sql: true
-  sql:
-    init:
-      mode: always
   profiles:
     active: "prod"
   config:
@@ -71,6 +75,9 @@ management:
   info:
     env:
       enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
 
 endpoints:
   shutdown:
@@ -97,3 +104,5 @@ logging:
       ahmed:
         bank:
           accounts: DEBUG
+  pattern:
+    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"

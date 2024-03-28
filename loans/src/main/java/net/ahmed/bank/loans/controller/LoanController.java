@@ -195,8 +195,9 @@ public class LoanController {
     @GetMapping("/fetch")
     public ResponseEntity<LoanDto> findLoan(@RequestHeader("ahmedbank-correlation-id") String  correlationId,
                                             @RequestParam String mobileNumber){
-        logger.debug("ahmed bank correlation id found: {}", correlationId);
+        logger.debug("fetchLoansDetails method started");
         LoanDto loanDto =  loanService.fetchLoan(mobileNumber);
+        logger.debug("fetchLoansDetails method ended");
         return ResponseEntity.status(HttpStatus.OK).body(loanDto);
     }
     @Operation(

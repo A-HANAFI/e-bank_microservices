@@ -1,6 +1,5 @@
 package net.ahmed.bank.cards.controller;
 
-import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -161,8 +160,9 @@ public class CardsController {
     public ResponseEntity<CardsDto> getCard(@RequestHeader("ahmedbank-correlation-id") String  correlationId,
                                             @RequestParam @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
                                                 String mobileNumber){
-        logger.debug("ahmed bank correlation id found: {}", correlationId);
+        logger.debug("fetchCardsDetails method started");
         CardsDto cardsDto = iCardsService.fetchCard(mobileNumber);
+        logger.debug("fetchCardsDetails method ended");
         return ResponseEntity.status(HttpStatus.OK).body(cardsDto);
     }
     @Operation(

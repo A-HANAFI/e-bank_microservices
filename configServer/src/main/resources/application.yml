@@ -15,7 +15,6 @@ spring:
           clone-on-start: true
           force-pull: true
 
-
 encrypt:
   key: "hellohello654321"
 
@@ -35,3 +34,7 @@ management:
         enabled: true
     shutdown:
       enabled: true
+
+logging:
+  pattern:
+    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
